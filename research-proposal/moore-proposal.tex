@@ -17,6 +17,27 @@ and running data under the constraints of a biologically actutuated plant.}
 
 \maketitle
 
+\section{The goal}
+
+I plan to extend the work presented in \cite{Wang2012} in such a way that the
+controller parameters are identified by tracking experimental kinematic data in
+the cost function as opposed to a task based costs. The key addition will be
+the use of a data from walkers and runners under lateral and longitudinal
+random perturbations. And other addtions will include:
+
+\begin{itemize}
+  \item Simple human walker/runner model developed in Opensim which is
+    optimized for speed of simulation.
+\end{itemize}
+
+We believe that by utilizing data collected from walkers and runners while
+being sufficiently and randomly perturbed and an indirect identification
+approach that we can converge to more realistic controllers and control
+parameters than predictive control methods have shown. Also, with careful
+attention to simulation speed and optimization methods we can increase the
+speed of the computations so that using time series on the order of 5 minutes
+at 100 hZ (~250 steps) is computationally tractable.
+
 \section{Introduction}
 
 The current research focus at the Human Motion \& Control Laboratory in
@@ -30,21 +51,85 @@ prosthetics.
 
 There are two approaches we are working with:
 
-1. Direct identification given measurements of the controllers inputs and
-outputs.
-2. Indirect identifcation given the measuremetns of the system's kinematics and
-a known plant model.
+\begin{itemize}
+  \item Direct identification given measurements of the controllers inputs and
+    outputs.
+  \item Indirect identifcation given the measuremetns of the system's
+    kinematics and a known plant model.
+\end{itemize}
 
-Both of these methods. The direct identification requires a noise model for the
-controller and a persistnetly excited input to reduce bias in the estimates of
-the model. The indirect method is attractive because any identification method
-can be applied.
+The direct identification methods is attractive because it doesn't requier a
+model of the plant. But it is limited due to the inability to acutally measure
+the controller inputs and outputs directly and that it requires a suffciently
+adequate noise model for the controller and along with persistent excitation to
+reduce bias in the estimates of the model.
+
+The indirect method has been becoming more attractive to us attractive because
+any identification method can be applied with no effect from bias, but the
+downside is that 
 
 We are in need a sufficiently complex, but simple plant model that and
 similarly a simple control model set that includes the ``true'' model. There
 are many models that can be used, but a particularly interesting, sucessful.
 and relevant platn model is the one presented by \cite{Wang2012}. Wang et. al,
 demonstrated 
+
+\section{How}
+
+\subsection{Data}
+
+We have a modern gait lab that includes a Motek Medical hardware and software
+suite. The suite includes a Opsrey Digital RealTime Motion Capture system from
+Motion Analysis and a R-Mill Treamdill from ForceLink. The treadmill is dual
+belt with dual force plates and includes the ability to acutuate the treadmill
+surface laterally and in pitch. The belts can accelerate up to $20 m/s^{-2}$,
+the lateral motion of 0.1 m/s, and a pitching motion of 20 degrees/s. We have
+developed a protocol that applies random longitudinal and lateral perturbations
+over four minute trials sampled at 100 hz.
+
+% TODO : Show example perturbed data.
+
+We are currently collecting data from able-bodied subjects while walking and
+running at speeds from 0.8 m/s to 4.0 m/s.
+
+% TODO : Figure out what speeds we are actually using.
+
+I will have rich sets of rich motion capture, ground reaction force, joint
+torques, muscle force and length data available at the time of the visiting
+scholarship from this system and from multiple able-bodied subjects.
+
+\subsection{Plant Model}
+
+There are a variety of plant models capable of walking and running available
+for use, but my visit will focus on the development of a simple by sufficiently
+complex plant model using Opensim that is capable of faster than real time
+simulation times.
+
+\subsubsection{Simplest Model}
+
+
+\subsection{Controller Model}
+
+\subsection{Identification}
+
+\subsection{Contributions}
+
+fast Simbody/Opensim based walking simualtion models
+rich datasets of perturbed walking and running
+framework for system identification of control mechanisms for walking
+
+\section{My Background}
+
+I'd say that I'm computationaly adept at modeling and simulation and have
+experience with biomechanical systems and walking. I was initially trained at
+UC Davis and specialized in Sports Biomechanics for my graduate work. I
+co-developed and run a project called PyDy that provides an open source
+modeling and simulation framework
+
+Opensim and Simbody have not been a popular tool in the laboratories that I've
+worked at and thus my experience with them is low. I've tended to develop my
+own models with PyDy in the past. But I've spent time working on example
+walking models
 
 %Specific Aims: Review the rationale for your study, and state your hypotheses
 %and specific aims.
