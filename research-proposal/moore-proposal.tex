@@ -4,8 +4,10 @@
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
-\title{Identification of human locomotion control using on perturbed walking
-and running data under the constraints of a biologically actutuated plant.}
+\usepackage[top=0.75in, bottom=0.75in, left=1.0in, right=1.0in]{geometry}
+
+\title{Identification of human locomotion control with perturbed walking and
+running data under the constraints of a biologically actutuated plant}
 
 \author{Jason K. Moore\\
   Postdoctoral Research Associate\\
@@ -13,196 +15,7 @@ and running data under the constraints of a biologically actutuated plant.}
   Cleveland State University
 }
 
-\begin{document}
-
-\maketitle
-
-\section{The Gist}
-
-I plan to extend the optimal control work presented in \cite{Wang2012} in such
-a way that the controller parameters are identified by tracking experimental
-kinematic data in the cost function as opposed to a task based cost
-optimization scheme. The key innovation that I will add will be the use of a
-data from walkers and runners under lateral and longitudinal random
-perturbations for the trajectory tracking. In this process, contributions will
-be made to improve simulation accuracy and time along with speedups in
-convergence to optimal solutions using the Opensim framework.
-
-\section{The Hypothesis}
-
-We believe that by utilizing data collected from walkers and runners while
-being sufficiently and randomly perturbed using an indirect identification
-approach with a sufficiently realistic plant model that we can converge to more
-realistic controllers and control parameters than predictive control methods
-have shown. Also, with careful attention to simulation speed and optimization
-methods we can increase the speed of the computations so that using time series
-on the order of 1 to 10 minutes at 100 hZ (~250 steps) is computationally
-tractable using modern cloud computing
-
-\section{Introduction}
-
-The current research focus at the Human Motion \& Control Laboratory in
-Cleveland is focused on the identification and application of biolligically
-inspired controllers to powered prothestics. My current role is based around
-using data driven approaches to identify controllers capable of reproducing
-natural human gait patterns from data collected from able bodied people in
-walking and running. The current identified controllers are structured to map
-to the sensors and acutuators available on non-nuerologically connected
-prosthetics.
-
-There are two approaches we are working with:
-
-\begin{itemize}
-  \item Direct identification given measurements of the controllers inputs and
-    outputs.
-  \item Indirect identifcation given the measuremetns of the system's
-    kinematics and a known plant model.
-\end{itemize}
-
-The direct identification methods is attractive because it doesn't requier a
-model of the plant. But it is limited due to the inability to acutally measure
-the controller inputs and outputs directly and that it requires a suffciently
-adequate noise model for the controller and along with persistent excitation to
-reduce bias in the estimates of the model.
-
-The indirect method has been becoming more attractive to us attractive because
-any identification method can be applied with no effect from bias, but the
-downside is that 
-
-We are in need a sufficiently complex, but simple plant model that and
-similarly a simple control model set that includes the ``true'' model. There
-are many models that can be used, but a particularly interesting, sucessful.
-and relevant platn model is the one presented by \cite{Wang2012}. Wang et. al,
-demonstrated 
-
-\section{How}
-
-\subsection{Data}
-
-We have a modern gait lab that includes a Motek Medical hardware and software
-suite. The suite includes a Opsrey Digital RealTime Motion Capture system from
-Motion Analysis and a R-Mill Treamdill from ForceLink. The treadmill is dual
-belt with dual force plates and includes the ability to acutuate the treadmill
-surface laterally and in pitch. The belts can accelerate up to $20 m/s^{-2}$,
-the lateral motion of 0.1 m/s, and a pitching motion of 20 degrees/s. We have
-developed a protocol that applies random longitudinal and lateral perturbations
-over four minute trials sampled at 100 hz.
-
-% TODO : Show example perturbed data.
-
-We are currently collecting data from able-bodied subjects while walking and
-running at speeds from 0.8 m/s to 4.0 m/s.
-
-% TODO : Figure out what speeds we are actually using.
-
-I will have rich sets of rich motion capture, inertially compensated ground
-reaction forces data along with estimates of joint kinematics, torques, muscle
-force and length data available at the time of the visiting scholarship from
-this system and from multiple able-bodied subjects.
-
-\subsection{Identification}
-
-\cite{Wang2012} approaches the ``identification'' of a plausible controller
-from the predictive standpoint. A plant and controller model structure is
-selected and the controller parameters are identified by miniminzing given a
-cost function based only on minimizing metabolic effort and keeping several
-tasks. I'd like to extend this concept by removing the task based costs and
-replacing them with trajectory tracking of measured kinematics collected from
-walkers and runners while being perturbed.
-
-Wang has shown that his controller is able to produce visually motions that
-also exhibit realistic joint torques, at least in walking. I hypothesize that
-more realistic controller parameters can be identified by tracking kinematic
-data from walkers and runners that are being perturbed with known (measured)
-perturbations.
-
-\begin{equation}
-  J = \int_0^\infty \mathbf{x}\mathbf{bf}\mathbf{x}^T +
-  \mathbf{u}\mathbf{R}\mathbf{u}^T
-\end{equation}
-
-This formulation will require simulating the system from 1 to 10 minutes of
-real time and ensuring that the difference in the states and the experimental
-measurements (sampled at 100 hz) a miminal. Wang's model simulated for 10s at
-2400 Hz for accuracy resulting in 10 hour computations on a 50 core cluster to
-converge on a solution. This means that using Wang's work as is, the
-computations could take 60 to 600 hours for the trajectory tracking.
-
-\subsection{Plant Model}
-
-There are a variety of plant models capable of walking and running potentially
-available for use, including Wang's Open Dynamics Engine based model, but my
-visit will focus on the development of a simple but sufficiently complex plant
-model based on lessons learned from Wang's implementation using Opensim that is
-more accurate and capable of simuluating accurately much faster than real time.
-\footnote{I've been in contact with the authors of \cite{Wang2012} and
-understand that a Simbody based model may be close to opertaional at the time
-of the visiting scholarship. I also asked Wang if the source code for the 2012
-paper could be shared, but he seemed reluctant.}
-
-Wang's model is a 3D 30 degree of freedom model which can be simulated at real
-time on standard modern hardware. His plant includes simple contact for the
-heel and ball of the feet and Hill type muscle models to actuate the joints
-most important for gait analysis and simple joint torque specific
-
-\begin{itemize}
-  \item Simpler biomehcanical model, fewer degrees of freedom.
-  \item Restrictions on motion of the subject during walking.
-  \item Faster integration routines.
-  \item Use explicit formualations of the system and direct collocation.
-  \item Use initial guesses from Wang's results.
-\end{itemize}
-
-But small iterations are needed for
-simulation with the explicit Euler method used in Open Dynamics Engine and the
-shooting optimizations take 10 hours on a a 50 core cluster for optimziation of
-10 seconds of simulation.
-
-We'd like to simulate from 1 to 10 minutes of real time walking for trajectory
-tracking.
-
-Add specified position input.
-
-\subsection{Controller Model}
-
-I will start with Wang's controller model using his results as initial guesses
-for the controller parameters.
-
-\subsection{Contributions}
-
-All of the products developed during, prior, and after the the visiting
-scholarship that are related to this proposal will be made available under very
-permissible licenses (BSD/MIT like and/or CC-BY) and shared via code and data
-repositories on the world wide web. In paticular, these are the likely products
-that will potentially be valuable to the community:
-
-\begin{description}
-  \item[Plant Models] The source code and any Opensim xml descriptions for all
-    of the plant models will be released to the SimTK community and be hosted on
-    Github.
-  \item[Source Code] All of the source code will be shared via Github and
-    structured such that all published results are completely reproducible.
-  \item[Data] The anonimized human subject data will be shared via Figshare
-    and/or instutional repositories and released under the CC-BY-4.0 License.
-  \item[Papers] At least one journal paper will be published in an open access
-    under the CC-BY-4.0 licenses along with supplementary material (source
-    code and data) to reproduce the results. A preconfigured virutal machine
-    that can run the computations on a cloud infastructure will accompany the
-    results.
-\end{description}
-
-\section{My Background}
-
-I'd say that I'm computationaly adept at modeling and simulation and have
-experience with biomechanical systems and walking. I was initially trained at
-UC Davis and specialized in Sports Biomechanics for my graduate work. I
-co-develop and run a project called PyDy that provides an open source modeling
-and simulation framework for complex multi-body systems.
-
-Opensim and Simbody have not been a popular tool in the laboratories that I've
-worked at and thus my experience with them is low. I've tended to develop my
-own models with PyDy in the past. But I've spent time working on example
-walking models
+% Expectations from the reviewers:
 
 %Specific Aims: Review the rationale for your study, and state your hypotheses
 %and specific aims.
@@ -224,5 +37,268 @@ walking models
 %Suitability of Applicant:  Explain why your background is appropriate for the
 %proposed research problem. Describe your prior experience using OpenSim or
 %other modeling and simulation approaches.
+
+\begin{document}
+
+\maketitle
+
+\section*{The Gist}
+
+During the 2014 NCSRR visiting scholar program, I intend to extend the optimal
+control work presented in the paper ``Optimizing Locomotion Controllers Using
+Biologically-Based Actuators and Objectives'' by Wang et. al~\cite{Wang2012} in
+such a way that the controller parameters are identified by minimizing the
+difference in the simulation's kinematics and the measured kinematics from a
+large set of data collected from a sample of subjects walking and running while
+under the influence of lateral and longitudinal random perturbations. The
+resulting identified controller is hypothesized to be more realistic than any
+other existing model.
+
+\section*{The Hypothesis}
+
+My hypothesis is that it is possible to converge on more realistic controllers
+than predictive control methods have shown by utilizing an indirect
+identification approach with a large set data collected from walkers and
+runners who have been excited by random perturbations in combination with a
+sufficiently realistic plant model.
+
+Also, with careful attention to model complexity, simulation speed, and
+optimization methods I believe we can increase the speed of the computations
+such that simulating for 1 to 10 time minutes is computationally tractable
+using modern cloud computing resources and iteration times can be similar to or
+less than those presented in \cite{Wang2012}.
+
+\section*{The Challenges}
+
+Reducing computational speed while retaining model fidelity and accuracy.
+
+\section*{Introduction}
+
+The current research focus at the Human Motion \& Control Laboratory in
+Cleveland is focused on the identification and application of biologically
+inspired controllers to powered prosthetics. My current role is based around
+using data driven approaches to identify controllers capable of reproducing
+natural human gait patterns from data collected from able bodied people in
+walking and running. The current identified controllers are structured to map
+to the sensors and actuators available on non-neurologically connected
+prosthetics.
+
+There are two approaches we are working with:
+
+\begin{itemize}
+  \item Direct identification given measurements of the controllers inputs and
+    outputs.
+  \item Indirect identifcation given the measuremetns of the system's
+    kinematics and a known plant model.
+\end{itemize}
+
+The direct identification methods is attractive because it doesn't requier a
+model of the plant. But it is limited due to the inability to acutally measure
+the controller inputs and outputs directly and that it requires a suffciently
+adequate noise model for the controller and along with persistent excitation to
+reduce bias in the estimates of the model.
+
+The indirect method has been becoming more attractive to us attractive because
+any identification method can be applied with no effect from bias, but the
+downside is that the success is depdendent on computationally difficult
+optimization problem.
+
+We are in need a sufficiently complex, but simple plant model that and
+similarly a simple control model set that includes the ``true'' model. There
+are many models that can be used, but a particularly interesting, sucessful.
+and relevant platn model is the one presented by \cite{Wang2012}. Wang et. al,
+demonstrated 
+
+\section*{How}
+
+The project can be organized into these topics:
+
+\begin{itemize}
+  \item Collect and process perturbed gait data at CSU before the visiting
+    scholarship.
+  \item Develop an efficient plant model based on \cite{Wang2012} in Opensim.
+  \item Develop an identification/optimization routine based on kinematic
+    tracking, minimal metabolic effort, and joint torques.
+  \item Deploy the software on cloud architecture for maximum compute power and
+    minimum speed.
+\end{itemize}
+
+\subsection*{Human Subject Data}
+
+At CSU, we have a modern gait lab that includes a Motek Medical hardware and
+software suite. The suite includes an Opsrey Digital RealTime Motion Capture
+system from Motion Analysis and a R-Mill Treadmill from ForceLink. The
+treadmill has dual belt and force plates and it includes the ability to actuate
+the treadmill surface laterally and in pitch. The belts can accelerate up to
+$20 m/s^{-2}$, the lateral motion of 0.1 m/s, and a pitching motion of 20
+degrees/s. We have developed a protocol that applies random longitudinal and
+lateral perturbations over four minute trials sampled at 100 hz. This ability
+to actuate the treadmill surface is critical to obtain data rich enough for
+controller identification.
+
+% TODO : Show example perturbed data.
+% TODO : Figure out what speeds we are actually using.
+
+We are currently collecting data from able-bodied subjects while walking and
+running at speeds from 0.8 m/s to 4.0 m/s while under the influence of various
+white noise based perturbations. I will have sets of rich motion capture,
+inertially compensated ground reaction forces data along with estimates of
+joint kinematics, torques, muscle force and length data available at the time
+of the visiting scholarship from this system and from sufficient sample of
+able-bodied subjects.
+
+\subsection*{Plant Model}
+
+There are a variety of plant models capable of walking and running that
+available for use, potentially including Wang's Open Dynamics Engine based
+model, but my visit will focus on the development of a simple but sufficiently
+complex plant model using Opensim that capable of simulation speeds much faster
+than real time and of sufficient numerical accuracy. \footnote{I've been in
+  contact with the authors of \cite{Wang2012} and understand that there has
+been work on a Simbody based model. I also asked Wang if the source code for the
+2012 paper could be shared, but he seemed reluctant.}
+
+Wang's model is a 3D, 30 degree of freedom model which can be simulated at real
+time speeds on standard personal hardware. His plant includes simple contact
+for the heel and ball of the feet and Hill type muscle models to actuate the
+joints most important for gait analysis and simple joint torque actuation for
+non-gait-critical joints.
+
+In addition add we will add the ability to specifics the longitudinal and
+lateral acceleration of the ground plane as a specified input. This will allow
+use of the perturbation data.
+
+\subsection*{Controller Model}
+
+Wang et al. demonstrated that the set of control models based on a control
+architecture with positive muscle force and length feedback paired with typical
+proportional-derivative control on the joint angles is a very likely to contain
+the ``true'' controller used in human walking and running. This is indicated by
+the good prediction of joint torques and more natural looking motion. I will
+start by implementing Wang's controller model and making use of his results as
+initial guesses for the controller parameters.
+
+We also have some controller architectures based on gait phase scheduling that
+we've been exploring with direct identification methods that can be considered
+too.
+
+\subsection*{Identification}
+
+\cite{Wang2012} approaches the ``identification'' of a plausible controller
+from the predictive stand point. A plant and controller model structure is
+selected and the controller parameters are identified by minimizing given a
+cost function based only on minimizing metabolic effort, minimizing non-gait
+critical joint torques, and keeping several priority tasks, such as body
+orientation and forward speed. I'd like to modify this concept by removing the
+task based costs and replacing them with the minimization of the difference in
+the marker locations on the model and measurements collected from walkers and
+runners while being perturbed.
+
+Wang has shown that his controller is able to produce visually motions that
+also exhibit realistic joint torques, at least in walking. I hypothesize that
+more realistic controller parameters can be identified by tracking kinematic
+data from walkers and runners that are being perturbed with known (measured)
+perturbations. We will minimize a cost function of this form
+
+\begin{equation}
+  \mathbf{y}\mathbf{bf}\mathbf{y}^T +
+  \mathbf{u}\mathbf{R}\mathbf{u}^T dt
+\end{equation}
+
+where $\mathbf{y}$ is a vector of the difference in the measured and simulated
+marker coordinates and $\mathbf{u}$ is a vector of the average rate of
+metabolic expenditure of the muscles and the sum of the square of the joint
+torques which will be identical to \cite{Wang2012}'s definition.
+
+This formulation will require simulating the system from 1 to 10 minutes of
+real time and ensuring that the difference in the states and the experimental
+measurements (sampled at 100 hz) are minimal. Wang's model simulated for 10s at
+2400 Hz for accuracy resulting in 10 hour computations on a 50 core cluster to
+converge on a solution. This means that using Wang's work as is, the
+computations could take 60 to 600 hours for the trajectory tracking.
+
+For time optimal convergence times in the identification I plan to explore some
+or all of the following:
+
+\begin{description}
+  \item[Reduced order plant] It may not be necessary to employ a 30 DoF model
+    for antedate model fidelity. If needed the model can likely even be reduced
+    to a planar 2D model and still provide realistic results. Furthermore, the
+    plant model could be reduced to a simple walker (i.e. no knee, ankle, or
+    upper body degrees of freedom) if we place physical restrictions on the
+    human subjects degrees of motion.
+  \item[ODE Integration] Simbody includes several ODE integration routines that
+    include explicit and implicit solvers. CVODES may be able to be sped up by
+    providing an analytical Jacobian for the implicit solver or parallelizing the
+    numerical Jacobian computation. We may also be able to use or create a 2nd
+    order implicit Euler method that can compute quickly regardless of the
+    stiffness due to ground contact.
+  \item[Direct Collocation] Wang uses an evolutionary derivative-free
+    algorithm that requires shooting. It is also possible to use a strictly
+    implicit formulation of the system paired with direct collocation for
+    potentially faster convergence times even though the number of free
+    parameters is larger.
+  \item[Cloud Computing] The computations will be parallelized as much as
+    possible and run using Amazon's Web Service cloud computing services (~108
+    cores @ \$2.4 per hour).
+\end{description}
+
+\section*{Relevance to Rehabilitation}
+
+The results of these studies will be directly used at the CSU Human Motion \&
+Control Lab to improve the controllers in power prosthetics and exo-skeletons.
+These devices will and are already playing an important role in revalidation.
+
+But, in general, realistic control models for walking and running will enhance
+a broad range of research. As much as realistic musculo-skeletal models have
+helped, control models may do the same.
+
+\section*{Contributions}
+
+All of the products developed during, prior, and after the visiting scholarship
+that are related to this proposal will be made available under permissible
+licenses (BSD/MIT like and/or CC-BY-4.0) and shared via paper, code, and data
+repositories on the world wide web. In particular, these are the likely
+products that will be valuable to the community:
+
+\begin{description}
+  \item[Plant Models] The source code and/or any Opensim xml descriptions for
+    all of the plant models will be released to the SimTK community and be
+    hosted on Github.
+  \item[Source Code] All of the source code (plant and controller models,
+    optimization routines, cloud infrastructure provisioning, etc) will be
+    shared via Github and structured such that all published results are
+    computationally reproducible.
+  \item[Data] The anonymized human subject data will be shared via Figshare
+    and/or institutional repositories (CSU or Stanford) and released under the
+    CC-BY-4.0 License.
+  \item[Papers] At least one paper will be published in an open access journal
+    under the CC-BY-4.0 licenses along with supplementary material (source code
+    and data) to reproduce the results. A preconfigured virtual machine that
+    can run the computations on a cloud infastructure will accompany the
+    results.
+\end{description}
+
+\section*{My Background}
+
+I am adept at mathematical modeling and simulation and have extensive
+experience with both vehicle and biomechanical systems. I was initially trained
+at UC Davis and specialized in Sports Biomechanics for my graduate work where
+modeling, simulation, system identification played an important role in my
+graduate work. I co-develop and run a project, PyDy, that provides an open
+source modeling and simulation framework for complex multi-body systems. My
+Github profile provides a ``resume'' of sorts showing my open source
+contributions to scientific computing in vehicle dynamics and biomechanics.
+
+I am a beginner at Opensim and Simbody due to the fact the tools were not used
+in the laboratories that I've worked at thus far. But I've spent some time
+this year working through the tutorials available for Simbody and Opensim and
+am lightly proficient.
+
+I've tended to develop my own models with PyDy in the past. But I've spent
+time working on example walking models
+
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
