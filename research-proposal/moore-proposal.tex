@@ -49,10 +49,10 @@ control work presented in the paper ``Optimizing Locomotion Controllers Using
 Biologically-Based Actuators and Objectives'' by Wang et. al~\cite{Wang2012} in
 such a way that the controller parameters are identified by minimizing the
 difference in the simulation's kinematics and the measured kinematics from a
-large set of data collected from a sample of subjects walking and running while
-under the influence of lateral and longitudinal random perturbations. The
-resulting identified controller is hypothesized to be more realistic than any
-other existing model.
+large set of kinematic data. The data will be collected from a sample of
+subjects walking and running while under the influence of lateral and
+longitudinal random perturbations. The resulting identified controller is
+hypothesized to be more realistic than any other existing model.
 
 \section*{The Hypothesis}
 
@@ -68,10 +68,6 @@ such that simulating for 1 to 10 time minutes is computationally tractable
 using modern cloud computing resources and iteration times can be similar to or
 less than those presented in \cite{Wang2012}.
 
-\section*{The Challenges}
-
-Reducing computational speed while retaining model fidelity and accuracy.
-
 \section*{Introduction}
 
 The current research focus at the Human Motion \& Control Laboratory in
@@ -83,31 +79,23 @@ walking and running. The current identified controllers are structured to map
 to the sensors and actuators available on non-neurologically connected
 prosthetics.
 
-There are two approaches we are working with:
+There are two approaches we are working with: (1) Direct identification given
+measurements or estimates of the controllers inputs and outputs. (2) Indirect
+identification given the measurements of the system's kinematics and a known
+plant model.
 
-\begin{itemize}
-  \item Direct identification given measurements of the controllers inputs and
-    outputs.
-  \item Indirect identifcation given the measuremetns of the system's
-    kinematics and a known plant model.
-\end{itemize}
-
-The direct identification methods is attractive because it doesn't requier a
-model of the plant. But it is limited due to the inability to acutally measure
-the controller inputs and outputs directly and that it requires a suffciently
-adequate noise model for the controller and along with persistent excitation to
-reduce bias in the estimates of the model.
+The direct identification method is attractive because it does not require a
+model of the plant. But it limited due to the inability to actually measure the
+controller inputs and outputs directly and in that it requires a sufficiently
+adequate controller noise model in addition to persistent external excitation
+to reduce bias in the estimates of the model.
 
 The indirect method has been becoming more attractive to us attractive because
 any identification method can be applied with no effect from bias, but the
-downside is that the success is depdendent on computationally difficult
-optimization problem.
-
-We are in need a sufficiently complex, but simple plant model that and
-similarly a simple control model set that includes the ``true'' model. There
-are many models that can be used, but a particularly interesting, sucessful.
-and relevant platn model is the one presented by \cite{Wang2012}. Wang et. al,
-demonstrated 
+downside is that the success is dependent on much higher computational
+difficulty. This following sections detail how we can use expertise available
+at the Nation Center for Simulation Rehabilitation Research to help make this
+possible.
 
 \section*{How}
 
@@ -201,14 +189,13 @@ data from walkers and runners that are being perturbed with known (measured)
 perturbations. We will minimize a cost function of this form
 
 \begin{equation}
-  \mathbf{y}\mathbf{bf}\mathbf{y}^T +
-  \mathbf{u}\mathbf{R}\mathbf{u}^T dt
+  R = \mathbf{y}\mathbf{bf}\mathbf{y}^T + J
 \end{equation}
 
 where $\mathbf{y}$ is a vector of the difference in the measured and simulated
-marker coordinates and $\mathbf{u}$ is a vector of the average rate of
-metabolic expenditure of the muscles and the sum of the square of the joint
-torques which will be identical to \cite{Wang2012}'s definition.
+marker coordinates and J cost that includes the average rate of metabolic
+expenditure of the muscles and the sum of the square of the joint torques which
+will be identical to \cite{Wang2012}'s definition.
 
 This formulation will require simulating the system from 1 to 10 minutes of
 real time and ensuring that the difference in the states and the experimental
@@ -229,29 +216,35 @@ or all of the following:
     human subjects degrees of motion.
   \item[ODE Integration] Simbody includes several ODE integration routines that
     include explicit and implicit solvers. CVODES may be able to be sped up by
-    providing an analytical Jacobian for the implicit solver or parallelizing the
-    numerical Jacobian computation. We may also be able to use or create a 2nd
-    order implicit Euler method that can compute quickly regardless of the
-    stiffness due to ground contact.
+    providing an analytical Jacobian for the implicit solver or parallelizing
+    the numerical Jacobian computation with automatic differentiation. We may
+    also be able to use or create a 2nd order implicit Euler method that can
+    compute quickly regardless of the stiffness due to ground contact.
   \item[Direct Collocation] Wang uses an evolutionary derivative-free
     algorithm that requires shooting. It is also possible to use a strictly
     implicit formulation of the system paired with direct collocation for
     potentially faster convergence times even though the number of free
     parameters is larger.
   \item[Cloud Computing] The computations will be parallelized as much as
-    possible and run using Amazon's Web Service cloud computing services (~108
-    cores @ \$2.4 per hour).
+    possible with considerations of GPU based calculations, population-based
+    optimization methods, the latest libraries (boost, eigen, odeint, etc) and
+    run using Amazon's Web Service cloud computing services (~108 cores @ \$2.4
+    per hour).
 \end{description}
 
 \section*{Relevance to Rehabilitation}
 
 The results of these studies will be directly used at the CSU Human Motion \&
 Control Lab to improve the controllers in power prosthetics and exo-skeletons.
-These devices will and are already playing an important role in revalidation.
+There is a great deal of budding research on these devices with particular
+applications in rehabilitation in mind. We will be working to implement the
+identified controllers directly into the Indego exoskeleton and CSU's leg
+robot. The Indego will be on the market in 2015 with it's main market target
+being a rehabilitation robot.
 
-But, in general, realistic control models for walking and running will enhance
-a broad range of research. As much as realistic musculo-skeletal models have
-helped, control models may do the same.
+Also, in general, realistic control models that can be used in simulation for
+walking and running will enhance a broad range of research. As much as
+realistic musculo-skeletal models have helped, control models may do the same.
 
 \section*{Contributions}
 
@@ -283,20 +276,29 @@ products that will be valuable to the community:
 
 I am adept at mathematical modeling and simulation and have extensive
 experience with both vehicle and biomechanical systems. I was initially trained
-at UC Davis and specialized in Sports Biomechanics for my graduate work where
-modeling, simulation, system identification played an important role in my
-graduate work. I co-develop and run a project, PyDy, that provides an open
-source modeling and simulation framework for complex multi-body systems. My
+at UC Davis and specialized in Sports Biomechanics where modeling, simulation,
+system identification played an important role in my dissertation work. I
+co-develop and run a project, PyDy, that provides an open source modeling and
+simulation framework for complex multi-body systems. I've used this software to
+develop a variety of complex vehicle and biomechanical models which were used
+in the direct identification procedures used in to identify the human
+controller in the bicycle balance and control task in my dissertation. My
 Github profile provides a ``resume'' of sorts showing my open source
-contributions to scientific computing in vehicle dynamics and biomechanics.
+contributions to scientific computing in vehicle dynamics and biomechanics,
+with the latest being a gait analysis toolkit and the biggest being SymPy, as
+computer algebra system in Python. I'm competent at several programming
+languages, numerical methods, agile software development, and working on large
+Open Source projects.
 
 I am a beginner at Opensim and Simbody due to the fact the tools were not used
-in the laboratories that I've worked at thus far. But I've spent some time
-this year working through the tutorials available for Simbody and Opensim and
-am lightly proficient.
+in the laboratories that I've worked at thus far, and I've spent most of my
+time developing our projects. But I've spent some time this year working
+through the tutorials available for Simbody and Opensim and am lightly
+proficient. I will be spending more time with the software over the next year
+so that I can make use of it in this project.
 
-I've tended to develop my own models with PyDy in the past. But I've spent
-time working on example walking models
+I have the skills and resources needed to complete this project and am excited
+to learn from the Opemsim team and become part of that community.
 
 \bibliographystyle{plain}
 \bibliography{references}
