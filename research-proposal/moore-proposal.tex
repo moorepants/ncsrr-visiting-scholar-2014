@@ -60,7 +60,7 @@ running data under the constraints of a biologically actuated plant}
 The current research at the \href{http://hmc.csuohio.edu}{Human Motion \&
 Control Laboratory} in Cleveland is focused on the identification and
 application of biologically inspired controllers to powered prosthetics. My
-work is are based around using data driven approaches to identify feedback
+work is based around using data driven approaches to identify feedback
 controllers capable of reproducing natural walking and running. We have been
 working with controllers structured to connect the sensors and actuators
 available on non-neurologically connected prosthetics.
@@ -114,22 +114,22 @@ dual force plates with the ability to actuate the treadmill surface laterally
 and in pitch. The belts can accelerate up to $15 m/s^{-2}$, the lateral speed
 can reach 0.1 m/s, and the pitching rate can reach 20 degrees/s. We have
 developed a protocol that applies random longitudinal and lateral perturbations
-over four minute trials sampled at 100 hz. This ability to actuate the
+over four minute trials sampled at 100 Hz. This ability to actuate the
 treadmill surface is critical to obtain data rich enough for controller
 identification.
 
 % TODO : Figure out the acceleration limits for the sway and pitch. These are
 % not listed in the R-Mill's specifications.
 
-We are currently collecting data from able-bodied subjects while walking and
+We are currently collecting data from able-bodied subjects walking and
 running at speeds from 0.8 m/s to 4.0 m/s while under the influence of various
 white noise based perturbations. I will have data sets of rich motion capture
 and inertially compensated ground reaction forces along with estimates of joint
-kinematics, torques, muscle force, and muscle length data from sufficient a
+kinematics, torques, muscle forces, and muscle length data from a sufficient 
 sample of subjects available by the time of the visiting scholarship.
 
 \subsection*{Plant Model}
-
+% I think this next sentence is awkwardly long I think.
 There are a variety of plant models capable of walking and running available
 for use, potentially including Wang et. al's Open Dynamics Engine based model,
 but my visit will focus on the development of a simple but sufficiently complex
@@ -194,7 +194,7 @@ as defined by Wang et. al.
 
 This formulation will require simulating the system over a time span from 1 to
 10 minutes and ensuring that the difference in the marker positions and the
-experimental measurements (sampled at 100 hz) are minimal. Wang et. al's model
+experimental measurements (sampled at 100 Hz) are minimal. Wang et. al's model
 was simulated for 10s at 2400 Hz resulting in an average optimization iteration
 time of ~12s 50 core cluster. One goal of this work will be to optimize the
 simulations and identification for speed so that my computations are possible
@@ -206,6 +206,7 @@ or all of the following:
 \begin{description}
   \item[Reduced order plant] It may not be necessary use a 30 DoF model
     for adequate model fidelity. I will start with a simpler 3D model with
+    % something missing here??
   \item[ODE Integration] Simbody includes several ODE integration routines that
     include explicit and implicit solvers. For example, CVODES may be able to
     be sped up by providing an analytical Jacobian for the implicit solver or
@@ -249,13 +250,13 @@ All of the products developed during, prior, and after the visiting scholarship
 that are related to this proposal will be made available under permissible
 licenses
 (\href{http://opensource.org/licenses/BSD-2-Clause}{BSD}/\href{http://opensource.org/licenses/MIT}{MIT}
-like and/or \href{http://creativecommons.org/licenses/by/4.0/}{CC-BY-4.0}) and
+and/or \href{http://creativecommons.org/licenses/by/4.0/}{CC-BY-4.0}) and
 shared via paper, code, and data repositories on the world wide web. In
 particular, these are the likely products that will be valuable to the
 community:
 
 \begin{description}
-  \item[Plant Models] The source code and/or any Opensim xml descriptions for
+  \item[Plant Models] The source code and/or any Opensim XML descriptions for
     all of the plant models will be released to the SimTK community and be
     hosted on in a public Git repository (e.g.
     \href{http://github.com}{Github}).
