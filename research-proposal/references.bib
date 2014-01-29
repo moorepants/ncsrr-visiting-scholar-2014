@@ -1,0 +1,63 @@
+
+@article{Ackermann2010,
+	title = {Optimality principles for model-based prediction of human gait},
+	volume = {43},
+	issn = {0021-9290},
+	url = {http://www.sciencedirect.com/science/article/pii/S0021929009007210},
+	doi = {10.1016/j.jbiomech.2009.12.012},
+	abstract = {Although humans have a large repertoire of potential movements, gait patterns tend to be stereotypical and appear to be selected according to optimality principles such as minimal energy. When applied to dynamic musculoskeletal models such optimality principles might be used to predict how a patient's gait adapts to mechanical interventions such as prosthetic devices or surgery. In this paper we study the effects of different performance criteria on predicted gait patterns using a {2D} musculoskeletal model. The associated optimal control problem for a family of different cost functions was solved utilizing the direct collocation method. It was found that fatigue-like cost functions produced realistic gait, with stance phase knee flexion, as opposed to energy-related cost functions which avoided knee flexion during the stance phase. We conclude that fatigue minimization may be one of the primary optimality principles governing human gait.},
+	number = {6},
+	urldate = {2013-10-23},
+	journal = {Journal of Biomechanics},
+	author = {Ackermann, Marko and van den Bogert, Antonie J.},
+	month = apr,
+	year = {2010},
+	keywords = {Gait, Musculoskeletal modeling, Optimal control, Simulation},
+	pages = {1055--1060},
+	file = {ScienceDirect Full Text PDF:/home/moorepants/.zotero/zotero/pr0czzoa.default/zotero/storage/HJUICJXK/Ackermann and van den Bogert - 2010 - Optimality principles for model-based prediction o.pdf:application/pdf;ScienceDirect Snapshot:/home/moorepants/.zotero/zotero/pr0czzoa.default/zotero/storage/E9BBGXSG/S0021929009007210.html:text/html}
+},
+
+@article{Wang2012,
+	title = {Optimizing locomotion controllers using biologically-based actuators and objectives},
+	volume = {31},
+	url = {http://dl.acm.org/citation.cfm?id=2335376},
+	number = {4},
+	urldate = {2014-01-09},
+	journal = {{ACM} Transactions on Graphics ({TOG)}},
+	author = {Wang, Jack M. and Hamner, Samuel R. and Delp, Scott L. and Koltun, Vladlen},
+	year = {2012},
+	pages = {25},
+	annote = {
+Typical controller designs with no motion capture data influence exaggerate hip flexion.
+Most controllers output joitn torques directly and ignore the mapping from neural excitation to torque.
+{3D} walker model with 30 dof
+Muscles forces only actuate the hip, knee, and ankle {DoFs} in teh saggital plane using 8 {MTU} in each leg
+Minimizes metabolic energy expenditure
+Control law is made up of three parts: positive muscle force feedback, positive muscle length feedback, and negative {PD} feedback from joint angle/rate. All of these have a common time delay: k * (t - tau)
+The have a stance phase and swing phase controller
+Responsibility to maintain upper body orientation is always assigned to the lead leg
+All of the remaining {DoFs} that aren't leg/balance related are controlled by standard {PD} controllers.
+56 free parameters in the model to optimize. 124 parameters fully define a simulated motion of T timesteps.
+Effort is based on heat and work done by muscles and the sum of the square of torques for the joint torques.
+They used Open Dynamics Engine for simulations. The 24000 time step simulation takes iterated 3000 times takes 10 hrs using 50 cores!
+Initialization is hand tuned numbers from literature.
+Joint moments curves for walking is readily available but running is more scattered. So they got their own data with 20 subjects.
+Found that the time delay was very important for getting the correct curves.
+They can match walking joint moment curves well but not as good at matching running curves.
+They say they should adopt a more physically realistic simulation engine (i.e. simbody) and note that {ODE} "emphasizes speed and stability over physical accuracy"
+
+
+
+That was a fantastic read! Really nice results.
+So they have this controller that gives realistic predictions of joint angles and torques based on maximizing a set of tasks and minimizing effort (muscle and torque based) which has Hill muscle models for the most important drivers in walking/running and {PD} for the remaining joint torques. The controllers basically have some gains that are not functions of percent gait cycle, I think. Are the gains just constants for the swing and stance phase? They end up with 124 free parameters in the optimization and the simulation can run at real time speeds but it takes them 10 hours with 50 cores for 3000 iterations in the optimization.
+So the first question that comes to mind is can we start with their model and their optimization results as initial guesses for a system id that includes the plant model? Seems like replacing their controller with ours and formulating the
+Two ideas:
+1. Replace the controller we are using right now in the system id with theirs and run it.
+2. Set up the system id problem to include the plant model and the controller. If the simulation of a working controller can run at real time speeds, then each iteration of the system id optimizer will take the same time as the length out our data, but I suspect that that simulation can run much faster than real time speeds. I would guess that we can get simulate 10 minutes of real time in at least 1 min of computation time, or maybe better. It isn't that crazy of a model. Maybe the ground contact would slow the simulations considerably. I haven't done that yet.
+Once we have the gains for their model which have been identified with our data, I think it is possible to compute the optimal control criteria function and show that gains generated from real data would be better predicted by different weightings in your optimal control law.
+I still think that reducing the plant complexity and limiting the person's degrees of freedom would be a better way to start, then you may reduce computation time and just simplify the problem in general.
+I still don't understand how to map our measurements to the classic sys id approaches because we don't fundamentally measure the set point, the error from the set point, or the control inputs, etc. See: http://www.moorepants.info/notebook/notebook-2013-09-05.html
+
+I think I can write a proposal based on using system identification to improve the gains predicted by Wang's model.},
+	file = {biolocomotion.pdf:/home/moorepants/.zotero/zotero/pr0czzoa.default/zotero/storage/ATUXMS6J/biolocomotion.pdf:application/pdf;biolocomotion-supplement.pdf:/home/moorepants/.zotero/zotero/pr0czzoa.default/zotero/storage/S6MG45RU/biolocomotion-supplement.pdf:application/pdf}
+}
