@@ -183,7 +183,7 @@ find more realistic predictions of joint torques due to the difference
 constraints we impose. For example, we will minimize a cost function of this form
 
 \begin{equation}
-  R = \sum \mathbf{y}\mathbf{Q}\mathbf{y}^T + J
+  R = \sum \mathbf{y}^T\mathbf{Q}\mathbf{y} + J
 \end{equation}
 
 where $\mathbf{y}$ is a vector of the difference in the measured and simulated
@@ -195,9 +195,9 @@ This formulation will require simulating the system over a time span from 1 to
 10 minutes and ensuring that the difference in the marker positions and the
 experimental measurements (sampled at 100 Hz) are minimal. Wang et. al's model
 was simulated for 10s at 2400 Hz resulting in an average optimization iteration
-time of ~12s 50 core cluster. One goal of this work will be to optimize the
-simulations and identification for speed so that my computations are possible
-in a similar time frame as Wang et. al's.
+time of ~12s on a 50 core cluster. One goal of this work will be to optimize
+the simulations and identification for speed so that my computations are
+possible in a similar time frame as Wang et. al's.
 
 For time optimal convergence times in the identification I plan to explore some
 or all of the following:
