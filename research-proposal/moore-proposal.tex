@@ -1,11 +1,12 @@
-\documentclass[11pt,twocolumn]{article}
+\documentclass[11pt]{article}
+
+\usepackage[top=0.75in, bottom=0.75in, left=1.0in, right=1.0in]{geometry}
 
 % enables Arial font
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 
-\usepackage[top=0.75in, bottom=0.75in, left=1.0in, right=1.0in]{geometry}
-
+% make hyperlinks look reasonable
 \usepackage{hyperref}
 \usepackage{xcolor}
 \usepackage{xcolor}
@@ -19,8 +20,9 @@
             citecolor=blue,
             urlcolor=blue}
 
-\title{Identification of human locomotion control with perturbed walking and
-running data under the constraints of a biologically actuated plant}
+\title{Identification of closed-loop human locomotion control with perturbed
+walking and running data under the constraints of a biologically actuated
+plant}
 
 \author{Jason K. Moore\\
   Postdoctoral Research Associate\\
@@ -68,36 +70,34 @@ available on non-neurologically connected prosthetics.
 There are two approaches we are working with: (1) direct identification given
 measurements or estimates of the controllers' inputs and outputs and (2)
 indirect identification given the measurements of the system's kinematics and a
-``known'' plant model.
+plant model.
 
-The direct identification method is attractive because it does not require a
-model of the plant. But it is limited due to the inability to measure the
-controller inputs and outputs directly and in that it requires a sufficiently
-adequate controller noise model in addition to sufficient and persistent
-external excitation to reduce bias in the estimates of the controller.
-
-The indirect method has been become more appealing to us because any
-identification method can be applied with no effect from bias, but the downside
-is that the computational difficulty is much higher. This proposal details how
-we can use the expertise available at the National Center for Simulation
+So far, we have have focused direct identification but the indirect method has
+been become more appealing to us because biased results are not a concern,
+unlike direct identification. The major downside to indirect identification is
+that the computational difficulty is much higher. This proposal details how we
+can use the expertise available at the National Center for Simulation
 Rehabilitation Research (NCSRR) to help make indirect identification methods
-for gait control attainable.
+for closed-loop gait control attainable.
 
 During the 2014 NCSRR visiting scholar program, I intend to extend the optimal
 control work presented in the paper ``Optimizing Locomotion Controllers Using
 Biologically-Based Actuators and Objectives'' by Wang et. al~\cite{Wang2012} in
-such a way that the controller parameters are identified by minimizing the
+such a way that the feedback controller parameters are identified by minimizing the
 difference in the simulation's kinematics and the measured kinematics from a
 large set of data. The data will be collected from a sample of subjects walking
 and running while under the influence of random lateral and longitudinal
 perturbations. I hypothesize that the resulting identified controller will be
-more realistic than any other existing models.
+more realistic than any other existing models, due to the fact that the
+controller will be enforced to reproduce a variety of gait motions in which the
+subject is recovering, i.e. using feedback, from perturabations.
 
 Also, with careful attention to model complexity, simulation speed, and
 optimization methods I believe we can increase the speed of the computations
 such that simulations of 1 to 10 minutes are computationally tractable using
 modern cloud computing resources. Iteration times will likely be similar to or
-less than those presented in \cite{Wang2012}.
+less than those presented in \cite{Wang2012}, even with longer simulation
+times.
 
 \section*{How}
 
