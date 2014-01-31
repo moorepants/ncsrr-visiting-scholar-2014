@@ -72,10 +72,10 @@ measurements or estimates of the controllers' inputs and outputs and (2)
 indirect identification given the measurements of the system's kinematics and a
 plant model.
 
-So far, we have have focused on direct identification but the indirect method
-has been become more appealing to us because biased results are not a concern,
-unlike direct identification. The major downside to indirect identification is
-that the computational difficulty is much higher. This proposal details how we
+We have so far focused on direct identification; however the indirect method
+has been become more appealing to us as biased results are not a concern
+as with direct identification. In addition, a major downside of indirect identification is
+that computational difficulty is much higher. This proposal details how we
 can use the expertise available at the National Center for Simulation
 Rehabilitation Research (NCSRR) to help make indirect identification methods
 for closed-loop gait control attainable.
@@ -83,17 +83,16 @@ for closed-loop gait control attainable.
 During the 2014 NCSRR visiting scholar program, I intend to extend the optimal
 control work presented in the paper ``Optimizing Locomotion Controllers Using
 Biologically-Based Actuators and Objectives'' by Wang et. al~\cite{Wang2012} in
-such a way that the feedback controller parameters are identified by minimizing the
+such a way that feedback controller parameters are identified by minimizing the
 difference in the simulation's kinematics and the measured kinematics from a
 large set of data. The data will be collected from a sample of subjects walking
 and running while under the influence of random lateral and longitudinal
-perturbations. I hypothesize that the resulting identified controller will be
+perturbations. I hypothesize the resulting identified controller will be
 more realistic than any other existing models, due to the fact that the
 controller will reproduce a variety of gait motions in which the subject is
-recovering, i.e. using feedback, from perturbations.
+recovering, i.e. using feedback from perturbations.
 
-Also, with careful attention to model complexity, simulation speed, and
-optimization methods I believe we can increase the speed of the computations
+Also, I believe we can increase the speed of the computations
 such that simulations of 1 to 10 minutes are computationally tractable using
 modern cloud computing resources. Iteration times will likely be similar to or
 less than those presented in \cite{Wang2012}, even with longer simulation
@@ -163,18 +162,18 @@ motion. I will start by implementing Wang et. al's controller model and making
 use of his results as initial guesses for the controller parameters in the
 identification step. But, we also have controller architectures based on gait
 phase scheduling that we've been exploring with direct identification methods
-that can be considered too.
+that can be considered as well.
 
 \subsection*{Identification}
 
 Wang et. al  approach the ``identification'' of a plausible controller from the
 predictive stand point. A plant and controller model structure is selected and
-the controller parameters are identified by minimizing given a cost function
-based only on metabolic effort, non-gait critical joint torques, and keeping
-several priority tasks, such as body orientation and forward speed. I would
-like to modify this concept by removing the task based costs and replacing them
-with the minimization of the difference in the marker locations on the model
-and measurements collected from walkers and runners while being perturbed.
+controller parameters identified by minimizing a cost function based only on metabolic 
+effort, non-gait critical joint torques, and keeping several priority tasks, such 
+as body orientation and forward speed. I would like to modify this concept by removing 
+the task based costs and replacing them with the minimization of the difference in 
+the marker locations on the model and measurements collected from walkers and runners 
+while being perturbed.
 
 Wang et. al has shown that their controller is able to produce realistic joint
 torques with respect to average experimentally collected joint torques, at
@@ -243,13 +242,13 @@ implement the identified controllers directly into the Indego exoskeleton and
 CSU's leg robot with a below knee prosthetic. The Indego will be on the market
 in 2015 with target market of rehabilitation.
 
-Also, in general, realistic control models that can be used in simulation for
-walking and running will enhance a broad range of research, from rehabilitation
+In general, realistic control models that can be used in simulation for
+walking and running will enhance a broad range of research from rehabilitation
 to all aspects of biomechanics. Just as realistic simulation of
 musculo-skeletal models have transformed the way we implement rehabilitation,
-realistic control models may will likely make a similar impact. For example,
+realistic control models will likely make a similar impact. For example,
 real time feedback to clinicians on what parts of the human controller is and
-isn't being utilized in a biomechanical, will change the game.
+isn't being utilized in a biomechanical, will change the game. **SENTENCE DOES NOT MAKE SENSE?
 
 \section*{Contributions}
 
