@@ -90,9 +90,10 @@ and running while under the influence of random lateral and longitudinal
 perturbations. I hypothesize the resulting identified controller will be
 more realistic than any other existing models, due to the fact that the
 controller will reproduce a variety of gait motions in which the subject is
-recovering, i.e. using feedback from perturbations.
+recovering, i.e. using feedback, from perturbations.
 
-Also, I believe we can increase the speed of the computations
+Also, with careful attention to model complexity, simulation speed, and
+optimization methods I believe we can increase the speed of the computations
 such that simulations of 1 to 10 minutes are computationally tractable using
 modern cloud computing resources. Iteration times will likely be similar to or
 less than those presented in \cite{Wang2012}, even with longer simulation
@@ -210,11 +211,11 @@ or all of the following:
     over.
   \item[ODE Integration] Simbody includes several ODE integration routines that
     include explicit and implicit solvers. For example, CVODES may be able to
-    be sped up by providing an analytical Jacobian for the implicit solver or
-    parallelizing the numerical Jacobian computation with automatic
-    differentiation. We may also be able to use or create a 2nd order implicit
-    Euler method that can compute quickly with a stiff ground contact model.
-    Softening the ground contact may also be an option.
+    be sped up by providing an analytical Jacobian or automatically
+    differentiated subroutine, both of which can be parallelized. We may also
+    be able to use or create a 2nd order implicit Euler method that can compute
+    quickly with a stiff ground contact model.  Softening the ground contact
+    may also be an option.
   \item[Divergent Simulations] The optimizer algorithm can be structured such
     that simulations divergent from the measured data end quickly, but still
     provide useful information to the optimizer. The full length simulations
@@ -242,13 +243,13 @@ implement the identified controllers directly into the Indego exoskeleton and
 CSU's leg robot with a below knee prosthetic. The Indego will be on the market
 in 2015 with target market of rehabilitation.
 
-In general, realistic control models that can be used in simulation for
-walking and running will enhance a broad range of research from rehabilitation
-to all aspects of biomechanics. Just as realistic simulation of
-musculo-skeletal models have transformed the way we implement rehabilitation,
-realistic control models will likely make a similar impact. For example,
-real time feedback to clinicians on what parts of the human controller is and
-isn't being utilized in a biomechanical, will change the game. **SENTENCE DOES NOT MAKE SENSE?
+In general, realistic control models that can be used in simulation for walking
+and running will enhance a broad range of research from rehabilitation to
+biomechanical design. Just as realistic simulation of musculo-skeletal models
+have transformed rehabilitation science, realistic control models will likely
+make a similar impact. For example, real-time feedback for clinicians showing
+how the human controller is being utilized during therapy may prove more
+valuable that traditional biomechanical measures.
 
 \section*{Contributions}
 
