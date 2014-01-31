@@ -89,8 +89,8 @@ large set of data. The data will be collected from a sample of subjects walking
 and running while under the influence of random lateral and longitudinal
 perturbations. I hypothesize that the resulting identified controller will be
 more realistic than any other existing models, due to the fact that the
-controller will be enforced to reproduce a variety of gait motions in which the
-subject is recovering, i.e. using feedback, from perturabations.
+controller will reproduce a variety of gait motions in which the subject is
+recovering, i.e. using feedback, from perturbations.
 
 Also, with careful attention to model complexity, simulation speed, and
 optimization methods I believe we can increase the speed of the computations
@@ -152,19 +152,18 @@ perturbations in simulation.
 
 \subsection*{Controller Model}
 
-Wang et al. demonstrated that the set of control models based on a control
-architecture with positive muscle force and length feedback paired with typical
+I am interested in identifying a feedback controller which is a function of the
+system state that can reproduce the entire measured movement. Wang et al.
+demonstrated that the set of control models based on a control architecture
+with positive muscle force and length feedback paired with typical
 proportional-derivative control on the joint angles is a very likely to contain
-the ``true'' controller used in human walking and running. This is indicated by
-the good prediction of joint torques and more natural looking motion. I will
-start by implementing Wang's controller model and making use of his results as
-initial guesses for the controller parameters.
-
-% TODO : Maybe remove the following sentence.
-
-We also have some controller architectures based on gait phase scheduling that
-we've been exploring with direct identification methods that can be considered
-too.
+the ``true'' feedback controller used in human walking and running. This is
+indicated by the good prediction of joint torques and more visually realistic
+motion. I will start by implementing Wang et. al's controller model and making
+use of his results as initial guesses for the controller parameters in the
+identification step. But, we also have controller architectures based on gait
+phase scheduling that we've been exploring with direct identification methods
+that can be considered too.
 
 \subsection*{Identification}
 
@@ -177,25 +176,26 @@ like to modify this concept by removing the task based costs and replacing them
 with the minimization of the difference in the marker locations on the model
 and measurements collected from walkers and runners while being perturbed.
 
-Wang et. al has shown that his controller is able to produce motions that also
-exhibit realistic joint torques, at least in walking. I expect our method to
-find more realistic predictions of joint torques due to the different
-constraints we impose. For example, we will minimize a cost function of this form
+Wang et. al has shown that their controller is able to produce realistic joint
+torques with respect to average experimentally collected joint torques, at
+least in walking. I expect our method to find more accurate predictions of
+joint torques for our subjects due to the tracking term in the cost function.
+For example, we will minimize a cost function of this form
 
 \begin{equation}
   R = \sum \mathbf{y}^T\mathbf{Q}\mathbf{y} + J
 \end{equation}
 
 where $\mathbf{y}$ is a vector of the difference in the measured and simulated
-marker coordinates and $J$ represents the average rate of metabolic expenditure
-of the muscles and the sum of the square of the non-gait-critical joint torques
-as defined by Wang et. al.
+marker coordinates and, as defined by Wang et. al, $J$ represents the average
+rate of metabolic expenditure of the muscles and the sum of the square of the
+non-gait-critical joint torques.
 
 This formulation will require simulating the system over a time span from 1 to
 10 minutes and ensuring that the difference in the marker positions and the
 experimental measurements (sampled at 100 Hz) are minimal. Wang et. al's model
 was simulated for 10s at 2400 Hz resulting in an average optimization iteration
-time of ~12s on a 50 core cluster. One goal of this work will be to optimize
+time of 12 s on a 50 core cluster. One goal of this work will be to optimize
 the simulations and identification for speed so that my computations are
 possible in a similar time frame as Wang et. al's.
 
@@ -203,16 +203,22 @@ For time optimal convergence times in the identification I plan to explore some
 or all of the following:
 
 \begin{description}
-  \item[Reduced order plant] It may not be necessary use a 30 DoF model
-    for adequate model fidelity. I will build an Opensim model similar to Wang
-    et. al's and use Opensim's ability to lock degrees of freedom to start with
-    reduced order models.
+  \item[Reduced order plant] It may not be necessary use a 30 degree of freedom
+    model for adequate model fidelity. I will build an Opensim model similar to
+    Wang et. al's and use Opensim's ability to lock degrees of freedom to start
+    with reduced order models. A reduced order plant will also decrease the
+    controller complexity, reducing the number of free variables to optimize
+    over.
   \item[ODE Integration] Simbody includes several ODE integration routines that
     include explicit and implicit solvers. For example, CVODES may be able to
     be sped up by providing an analytical Jacobian for the implicit solver or
     parallelizing the numerical Jacobian computation with automatic
     differentiation. We may also be able to use or create a 2nd order implicit
     Euler method that can compute quickly with a stiff ground contact model.
+  \item[Divergent Simulations] The optimizer algorithm can be structured such
+    that simulations divergent from the measured data end quickly, but still
+    provide useful information to the optimizer. The full length simulations
+    will only be run once the minimum is close at hand.
   \item[Direct Collocation] Wang et. al uses an evolutionary derivative-free
     algorithm, CMA, that requires shooting. It is also possible to use a
     strictly implicit formulation of the system equations of motion paired with
@@ -290,19 +296,18 @@ controller in the bicycle balance and control task in my dissertation. My
 sorts showing my open source contributions to scientific computing in vehicle
 dynamics and biomechanics, with the latest being a gait analysis toolkit and
 the most popular being \href{http://www.sympy.org}{SymPy}, a computer algebra
-system in Python. In addition, I am proficient at several programming
-languages, numerical methods, agile software development, and working on large
-Open Source projects.
+system. In addition, I am proficient at several programming languages,
+numerical methods, agile software development, and working on large open source
+projects.
 
 I am new to Opensim and Simbody due to the fact the tools were not used in the
-laboratories that I've worked at thus far, and I've spent most of my time
-developing our projects for simulation needs. But I've spent some time this
-year working through the tutorials available for Simbody and Opensim and am now
-lightly proficient. I will be spending more time with the software over the
-next six months so that I can effectively make use of them in this project.
-
-I have the skills and resources needed to complete this project and am excited
-to learn from the Opemsim team and become part of that community.
+laboratories that I have worked at thus far and that I have spent most of my
+time developing our custom tools for simulation needs. But I have spent some
+time this year learning Simbody and Opensim and am now lightly proficient. I
+will be spending more time with the software over the next six months so that I
+can effectively make use of them in this project. I have the base skills needed
+to complete this project and am excited to enhance those skills with the help
+of the Opensim team and become part of that community.
 
 \bibliographystyle{plain}
 \bibliography{references}
