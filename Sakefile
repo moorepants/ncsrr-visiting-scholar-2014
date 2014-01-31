@@ -29,6 +29,7 @@ concatenate pdf:
         - misc/Visiting_Scholars_App_2014_Completed.pdf
         - $RESUME_PATH/JasonMoore_cv.pdf
         - research-proposal/moore-proposal.pdf
+        - misc/hubbard-recommendation.pdf
     formula: >
         pdfseparate -f 3 -l 3 misc/Visiting_Scholars_App_2014_Completed.pdf application.pdf;
-        pdfunite application.pdf research-proposal/moore-proposal.pdf $RESUME_PATH/JasonMoore_cv.pdf proposal-packet-moore.pdf;
+        pdfunite application.pdf research-proposal/moore-proposal.pdf $RESUME_PATH/JasonMoore_cv.pdf misc/hubbard-recommendation.pdf proposal-packet-moore.pdf;
