@@ -1,6 +1,34 @@
-#! RESUME_PATH=/home/moorepants/Documents/resume/
-build-resume:
+#! RESUME_PATH=/home/moorepants/Documents/resume
+#! RESUME_TEX_FILE=/home/moorepants/Documents/resume/JasonMoore_cv.tex
+#! RESUME_PDF_FILE=/home/moorepants/Documents/resume/JasonMoore_cv.pdf
+#! PROPOSAL_TEX_FILE = research-proposal/moore-proposal.tex
 
-build-proposal:
-
-concatenate-pdf:
+build resume:
+    help: compiles my resume
+    dependencies:
+        - $RESUME_TEX_FILE
+    formula: >
+        make -C $RESUME_PATH;
+    output:
+        - $RESUME_PDF_FILE
+build proposal:
+    help: builds the proposal
+    dependencies:
+        - $PROPOSAL_TEX_FILE
+        - research-proposal/references.bib
+    formula: >
+        pdflatex $PROPOSAL_TEX_FILE;
+        pdflatex $PROPOSAL_TEX_FILE;
+        bibtex research-proposal/moore-proposal.aux;
+        pdflatex $PROPOSAL_TEX_FILE;
+    output:
+        - research-proposal/moore-proposal.pdf
+concatenate pdf:
+    help: builds the whole packet
+    dependencies:
+        - misc/Visiting_Scholars_App_2014_Completed.pdf
+        - $RESUME_PATH/JasonMoore_cv.pdf
+        - research-proposal/moore-proposal.pdf
+    formula: >
+        pdfseparate -f 3 -l 3 misc/Visiting_Scholars_App_2014_Completed.pdf application.pdf;
+        pdfunite application.pdf research-proposal/moore-proposal.pdf $RESUME_PATH/JasonMoore_cv.pdf proposal-packet-moore.pdf;
